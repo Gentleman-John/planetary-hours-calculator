@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/planetary_hours
+      - FLASK_APP=main.py
+      - FLASK_DEBUG=0
+    restart: always
+    volumes:
+      - .:/app
+      
+  db:
+    image: postgres:14
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=planetary_hours
+    ports:
+      - "5432:5432"
+    restart: always
+
+volumes:
+  postgres_data:
